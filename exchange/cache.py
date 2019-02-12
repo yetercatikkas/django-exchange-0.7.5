@@ -18,7 +18,7 @@ CACHE_ENABLED = getattr(settings, CACHE_ENABLED_KEY, CACHE_ENABLED_DEFAULT)
 CACHE_KEY_PREFIX = getattr(settings, CACHE_KEY_PREFIX_KEY,
                            CACHE_KEY_PREFIX_DEFAULT)
 
-CACHE_TIMEOUT = 0  # Not configurable at all
+CACHE_TIMEOUT = 1800  # Not configurable at all
 
 cache = get_cache(CACHE_DATABASE)
 
