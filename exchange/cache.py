@@ -3,7 +3,6 @@ from django.conf import settings
 
 from exchange.models import ExchangeRate
 
-
 CACHE_ENABLED_KEY = 'EXCHANGE_CACHE_ENABLED'
 CACHE_ENABLED_DEFAULT = True
 
@@ -13,12 +12,14 @@ CACHE_DATABASE_DEFAULT = 'default'
 CACHE_KEY_PREFIX_KEY = 'EXCHANGE_CACHE_KEY_PREFIX'
 CACHE_KEY_PREFIX_DEFAULT = 'exchange'
 
+CACHE_TIMEOUT_KEY = 'EXCHANGE_CACHE_TIMEOUT'
+CACHE_TIMEOUT_DEFAULT = 1800
+
 CACHE_DATABASE = getattr(settings, CACHE_DATABASE_KEY, CACHE_DATABASE_DEFAULT)
 CACHE_ENABLED = getattr(settings, CACHE_ENABLED_KEY, CACHE_ENABLED_DEFAULT)
 CACHE_KEY_PREFIX = getattr(settings, CACHE_KEY_PREFIX_KEY,
                            CACHE_KEY_PREFIX_DEFAULT)
-
-CACHE_TIMEOUT = 1800  # Not configurable at all
+CACHE_TIMEOUT = getattr(settings, CACHE_TIMEOUT_KEY, CACHE_TIMEOUT_DEFAULT)
 
 cache = get_cache(CACHE_DATABASE)
 
@@ -37,7 +38,7 @@ def update_rates_cached():
 
 def set_cached_rate(source_currency, target_currency, rate):
     key = _get_cache_key(source_currency, target_currency)
-    cache.set(key, rate)
+    cache.set(key, rate, timeout=CACHE_TIMEOUT)
 
 
 def get_rate_cached(source_currency, target_currency):
